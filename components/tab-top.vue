@@ -1,7 +1,7 @@
 <template>
-	<view class="uni-tab-bar">
-		<scroll-view id="tab-bar" class="uni-swiper-tab" scroll-x :scroll-left="scrollLeft">
-			<view v-for="(tab,index) in datas" :key="index" :class="['swiper-tab-list',tabIndex==index ? 'active' : '']" :style="{width:tabWidth+'px'}"
+	<view class="tab-bar" :style="{height:tabHeight+'px'}">
+		<scroll-view id="tab-bar" class="swiper-tab" scroll-x :scroll-left="scrollLeft" :style="{lineHeight:tabHeight+'px',height:tabHeight+'px'}">
+			<view v-for="(tab,index) in datas" :key="index" :class="['tab-swiper-list',tabIndex==index ? 'active' : '']" :style="{width:tabWidth+'px'}"
 			 :id="index" :data-current="index" @click="tapTab(index)">{{tab}}</view>
 		</scroll-view>
 	</view>
@@ -15,52 +15,46 @@
 				default: function() {
 					return [];
 				}
+			},
+			tabDataHeight: {
+				type: Number,
+				default: 100
 			}
 		},
-
+		
+		computed:{
+			tabIndex(){
+				return this.$store.state.indexTabIndex;
+			}
+		},
+		watch:{
+			tabIndex:function(n,o){
+				this.scrollLeft = (n==0?0:this.tabWidth*(n-1));
+			}
+		},
 		data() {
 			return {
-				tabIndex: 0,
 				scrollLeft: 0,
-				tabWidth:150
+				tabWidth: 150,
+				tabHeight: 100
 
 			};
 		},
-		created:function(){
-			console.log('tab created');
-			console.log(this.datas.length);
-			if(this.datas.length>4){
-				this.tabWidth = uni.upx2px((750/4)+20);
-			}else{
-				this.tabWidth = uni.upx2px(750/this.datas.length);
+		created: function() {
+			if (this.datas.length > 4) {
+				this.tabWidth = uni.upx2px((750 / 4) + 20);
+			} else {
+				this.tabWidth = uni.upx2px(750 / this.datas.length);
 			}
-			
+			this.tabHeight = uni.upx2px(this.tabDataHeight);
 		},
-	
+
 		methods: {
-			getElSize(id) { //得到元素的size
-				return new Promise((res, rej) => {
-					uni.createSelectorQuery().select('#' + id).fields({
-						size: true,
-						scrollOffset: true
-					}, (data) => {
-						res(data);
-					}).exec();
-				});
-			},
-			async tapTab(index) { //点击tab-bar
+			tapTab(index) { 
 				if (this.tabIndex === index) {
 					return false;
-				} else {
-
-					this.$emit("tab-index-event", index);
-
-					let tabBar = await this.getElSize("tab-bar"),
-						tabBarScrollLeft = tabBar.scrollLeft; //点击的时候记录并设置scrollLeft
-					this.scrollLeft = tabBarScrollLeft;
-					this.isClickChange = true;
-					this.tabIndex = index;
-				}
+				} 
+				this.$store.commit('changeIndexTabIndex', index);
 			},
 
 		}
@@ -68,5 +62,31 @@
 </script>
 
 <style>
+	.tab-bar {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
 
+	.swiper-tab {
+		width: 100%;
+		white-space: nowrap;
+		border-bottom: 1px solid #c8c7cc;
+		position: fixed;
+		background: #FFFFFF;
+		z-index: 999;
+		left: 0;
+	}
+
+	.tab-swiper-list {
+		font-size: 30upx;
+		width: 150upx;
+		display: inline-block;
+		text-align: center;
+		color: #555;
+	}
+
+	.tab-bar .active {
+		color: #007AFF;
+	}
 </style>

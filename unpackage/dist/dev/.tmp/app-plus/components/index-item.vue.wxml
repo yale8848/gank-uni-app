@@ -1,0 +1,1 @@
+<import src="/components/uni-card/uni-card.vue.wxml" /><template name="59131a99"><view class="_view 59131a99 content"><template bindtap="handleProxy" data-eventid="{{'59131a99-0'}}" data-comkey="{{$k}}" data="{{...$root['0'], ...$root[$kk+'59131a99-0'],$root, $slotdefault:'59131a99-default-59131a99-0'}}" is="50910604"></template></view></template>
