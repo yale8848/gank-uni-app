@@ -1,8 +1,0 @@
-<import src="/components/uni-card/uni-card.vue.wxml" />
-<import src="/components/tab-top.vue.wxml" />
-<import src="/components/index-item.vue.wxml" />
-<import src="/components/uni-load-more.vue.wxml" />
-<import src="/common/slots.wxml" />
-
-<template name="59131a99-default-59131a99-0"><image mode="center" src="{{data.images[0]}}" style="width: 100%;" class="_image 59131a99"></image></template>
-
